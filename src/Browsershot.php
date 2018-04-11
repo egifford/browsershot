@@ -494,12 +494,14 @@ class Browsershot
 
         $binPath = $this->binPath ?: __DIR__.'/../bin/browser.js';
 
+        // Modifying for Windows: https://github.com/spatie/browsershot/issues/149#issuecomment-364242667
         $fullCommand =
-            $setIncludePathCommand.' '
-            .$setNodePathCommand.' '
-            .$nodeBinary.' '
+//            $setIncludePathCommand.' '
+//            .$setNodePathCommand.' '
+            $nodeBinary.' '
             .escapeshellarg($binPath).' '
-            .escapeshellarg(json_encode($command));
+            . '"' . str_replace('"', '""',  json_encode($command)) . '"';
+//            .escapeshellarg(json_encode($command));
 
         $process = (new Process($fullCommand))->setTimeout($this->timeout);
 
